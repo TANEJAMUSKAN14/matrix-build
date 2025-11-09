@@ -14,6 +14,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+        - name: Build matrix-ca5f892
+          run: echo "Running matrix job"
+        
+
       - name: matrix-c912048
         run: echo "Building for Node ${{ matrix.node }}"
 
