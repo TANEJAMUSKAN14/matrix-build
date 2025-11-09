@@ -1,37 +1,37 @@
-name: Multi-Platform Matrix Build (CA5F892)
+name: Matrix Build with Artifacts
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14, 16, 18]   # 👈 3 variants here
-
+        node: [16, 18, 20]  # 3 variants
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: matrix-c912048
+        run: echo "Building for Node ${{ matrix.node }}"
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node }}
 
-      - name: matrix-ca5f892
-        run: echo "Building for Node.js version ${{ matrix.node-version }}"
-
-      - name: Generate build artifact
+      - name: Generate artifact file
         run: |
-          echo "Build output for Node.js version ${{ matrix.node-version }}" > output-${{ matrix.node-version }}.txt
-          echo "Generated on $(date)" >> output-${{ matrix.node-version }}.txt
+          mkdir -p dist
+          echo "Build for Node ${{ matrix.node }}" > dist/output-${{ matrix.node }}.txt
+          echo "Date: $(date)" >> dist/output-${{ matrix.node }}.txt
+          echo "Repository: $GITHUB_REPOSITORY" >> dist/output-${{ matrix.node }}.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-ca5f892-node${{ matrix.node-version }}
-          path: output-${{ matrix.node-version }}.txt
+          name: build-c912048-node${{ matrix.node }}
+          path: dist/output-${{ matrix.node }}.txt
 
