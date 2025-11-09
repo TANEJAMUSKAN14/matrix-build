@@ -1,41 +1,29 @@
-name: Matrix Build with Artifacts
+name: Matrix Build
 
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18, 20]  # 3 variants
+        version: [14, 16, 18]   # 3 variants = 3 matrix jobs
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-        - name: Build matrix-ca5f892
-          run: echo "Running matrix job"
-        
+      - name: matrix-ca5f892
+        run: echo "Building for version ${{ matrix.version }}"
 
-      - name: matrix-c912048
-        run: echo "Building for Node ${{ matrix.node }}"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-
-      - name: Generate artifact file
-        run: |
-          mkdir -p dist
-          echo "Build for Node ${{ matrix.node }}" > dist/output-${{ matrix.node }}.txt
-          echo "Date: $(date)" >> dist/output-${{ matrix.node }}.txt
-          echo "Repository: $GITHUB_REPOSITORY" >> dist/output-${{ matrix.node }}.txt
+      - name: Generate build artifact
+        run: echo "Build output for version ${{ matrix.version }}" > output.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-c912048-node${{ matrix.node }}
-          path: dist/output-${{ matrix.node }}.txt
-
+          name: build-ca5f892-v${{ matrix.version }}
+          path: output.txt
