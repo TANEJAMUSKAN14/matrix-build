@@ -7,10 +7,10 @@ on:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14, 16, 18]  # three variants
-    runs-on: ubuntu-latest
+        node-version: [14, 16, 18]   # 👈 3 variants here
 
     steps:
       - name: Checkout code
@@ -22,17 +22,16 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: matrix-ca5f892
-        run: |
-          echo "Building for Node.js version ${{ matrix.node-version }}"
+        run: echo "Building for Node.js version ${{ matrix.node-version }}"
 
       - name: Generate build artifact
         run: |
-          ART=output-${{ matrix.node-version }}.txt
-          echo "Build output for Node.js version ${{ matrix.node-version }}" > $ART
-          echo "Generated on: $(date)" >> $ART
+          echo "Build output for Node.js version ${{ matrix.node-version }}" > output-${{ matrix.node-version }}.txt
+          echo "Generated on $(date)" >> output-${{ matrix.node-version }}.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-ca5f892-node${{ matrix.node-version }}
           path: output-${{ matrix.node-version }}.txt
+
